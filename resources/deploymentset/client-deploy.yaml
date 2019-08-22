@@ -1,0 +1,41 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    labels:
+        app: experiment-client
+    name: exp-client
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: experiment-client
+    strategy:
+        rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+        type: RollingUpdate
+    template:
+        metadata:
+            labels:
+                app: experiment-client
+            name: exp-client
+        spec:
+            containers:
+            - name: exp-client
+              image: experiment.client:v1
+              imagePullPolicy: IfNotPresent
+              resources:
+                  limits:
+                      memory: 1Gi
+              volumeMounts:
+              - name: client-properties
+                mountPath: /home/fbdl
+                readOnly: true
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            volumes:
+            - name: client-properties
+              configMap:
+                  defaultMode: 420
+                  name: client-properties-1.0

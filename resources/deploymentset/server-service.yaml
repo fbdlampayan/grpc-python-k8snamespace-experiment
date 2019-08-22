@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: experiment-server
+    namespace: fbdl
+    labels:
+        app: experiment-server
+spec:
+    ports:
+        - name: grpc-interface-8080
+          protocol: TCP
+          port: 8080
+          targetPort: 50051
+    selector:
+        app: experiment-server
+    type: ClusterIP
+    sessionAffinity: None

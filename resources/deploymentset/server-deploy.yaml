@@ -1,0 +1,33 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    labels:
+        app: experiment-server
+    name: exp-server
+    namespace: fbdl
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: experiment-server
+    strategy:
+        rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+        type: RollingUpdate
+    template:
+        metadata:
+            labels:
+                app: experiment-server
+            name: exp-server
+        spec:
+            containers:
+            - name: exp-server
+              image: experiment.server:v1
+              imagePullPolicy: IfNotPresent
+              resources:
+                  limits:
+                      memory: 1Gi
+            restartPolicy: Always
+            schedulerName: default-scheduler
